@@ -65,7 +65,7 @@ func (h *Handlers) GoogleCallback(c *gin.Context) {
 	}
 
 	// Generate JWT token
-	jwtToken, err := h.JwtService.GenerateToken(userInfo.Email)
+	jwtToken, err := h.JWT.GenerateToken(userInfo.Email)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
