@@ -6,11 +6,14 @@ import (
 	"fileTransfer/internal/handlers"
 	"fileTransfer/internal/repository"
 	"fileTransfer/internal/utils"
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
+	"net/url"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -22,7 +25,23 @@ func main() {
 	dsn := os.Getenv("MYSQL_DSN")
 	if dsn == "" {
 		dsn = "root:password@tcp(localhost:3306)/filetransfer"
+	} else {
+		// Parse Railway.app connection string
+		if strings.HasPrefix(dsn, "mysql://") {
+			parsedURL, err := url.Parse(dsn)
+			if err != nil {
+				log.Fatal("Error parsing MySQL connection string: ", err)
+			}
+
+			user := parsedURL.User.Username()
+			password, _ := parsedURL.User.Password()
+			host := parsedURL.Host
+			dbName := strings.TrimPrefix(parsedURL.Path, "/")
+
+			dsn = fmt.Sprintf("%s:%s@tcp(%s)/%s", user, password, host, dbName)
+		}
 	}
+
 	db := ConnectMySQL(dsn)
 
 	//Creating tables and inserting sample data
