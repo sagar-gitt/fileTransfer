@@ -65,18 +65,6 @@ func (h *Handlers) DownloadFile(c *gin.Context) {
 		return
 	}
 
-	// Check if the file exists and is not expired
-	file, err := h.FileDbRepo.GetFileByKey(key)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
-		return
-	}
-
-	if file.ExpirationDate.Before(time.Now()) {
-		c.JSON(http.StatusGone, gin.H{"error": "File link has expired"})
-		return
-	}
-
 	// Download file from AWS
 	resp, err := h.AwsS3.DownloadFile(key)
 	if err != nil {
