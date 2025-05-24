@@ -81,7 +81,6 @@ func (h *Handlers) DownloadFile(c *gin.Context) {
 	}
 
 	// Set appropriate headers for file download
-	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", file.Name))
 	c.Header("Content-Type", *resp.ContentType)
 	c.Header("Content-Length", fmt.Sprintf("%d", *resp.ContentLength))
 
