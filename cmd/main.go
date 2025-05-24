@@ -95,7 +95,7 @@ func main() {
 	r := gin.Default()
 
 	// CORS configuration
-	allowedOrigins := []string{"http://localhost:5173"}
+	allowedOrigins := []string{"http://localhost:5173", "https://your-frontend-url.vercel.app"}
 	if os.Getenv("ALLOWED_ORIGINS") != "" {
 		allowedOrigins = append(allowedOrigins, os.Getenv("ALLOWED_ORIGINS"))
 	}
