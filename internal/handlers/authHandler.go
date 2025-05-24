@@ -103,7 +103,9 @@ func (h *Handlers) GoogleCallback(c *gin.Context) {
 	log.Printf("Successfully generated JWT token")
 
 	// Redirect to frontend with token
-	frontendURL := "https://weupload-frontend-5y5gsqdmp-sagar-sinhas-projects.vercel.app/google/callback?token=" + jwtToken
-	log.Printf("Redirecting to frontend: %s", frontendURL)
-	c.Redirect(http.StatusTemporaryRedirect, frontendURL)
+	frontendURL := os.Getenv("FRONTEND_URL")
+	if frontendURL == "" {
+		frontendURL = "http://localhost:5173"
+	}
+	c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("%s/auth/callback?token=%s", frontendURL, jwtToken))
 }
